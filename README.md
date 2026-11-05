@@ -12,17 +12,21 @@ placeholders. See [Before going live](#before-going-live).
 
 **Homepage, in order:**
 
-1. Hero with transparent nav, headline and a photo that fades into the page
-2. Intro statement
-3. "What we do" card panel
-4. Two-image pair
-5. "Explore our work" projects carousel
-6. "Why choose us" card panel with the five core values
-7. Closing feature with one large image
-8. Founder teaser
-9. Footer
+1. Full-screen photo hero with an uppercase headline, a "Start a project" button and a pinned project card
+2. About block: heading, "Learn more" button, photo and two paragraphs
+3. "What we do" row of four numbered services
+4. "Featured projects" staggered grid of four projects
+5. "Why choose us" dark list of the five core values
+6. Full-width feature image with a closing line
+7. Founder quote
+8. Dark footer with a "Start a project" call to action
 
-**Also included:** a mobile menu, keyboard-operable carousels, scroll and hover motion that respects
+**Design:** a large uppercase grotesk type style, bracketed section labels such as `[ABOUT US]`,
+pill buttons with a round arrow chip, and a floating dark nav pill. Styling is in
+`src/styles/global.css` (`.display`, `.heading`, `.eyebrow`, `.cta`). Projects, About and Contact
+each open with a full-screen photo hero (`src/components/PageHero.astro`), each with its own photo.
+
+**Also included:** a mobile menu, scroll and hover motion that respects
 reduced-motion settings, responsive lazy-loaded images, unique page titles and descriptions, Open
 Graph tags, LocalBusiness JSON-LD, a sitemap, robots.txt and favicons.
 
@@ -33,16 +37,18 @@ Graph tags, LocalBusiness JSON-LD, a sitemap, robots.txt and favicons.
 | No visible "Placeholder" badge on photos | Removed at the owner's request. Stock photos now look like real work, so the list below is the only safeguard. |
 | Placeholder alt text says "not Adash's work" | Keeps screen readers and search engines from being told stock photos are Adash's buildings. Removed per photo by setting `placeholder: false`. |
 | Hero fits the screen on desktop | A taller hero meant scrolling through house and sky. On wide, short windows only the top of the house shows. |
-| "What we do" and "Why choose us" are left-aligned card panels | Changed from the original brief after a second visual reference was supplied. |
-| "What we do" has four cards | Only two services were specified. "Concept development" and "Execution & coordination" come from stages named in the founder's bio. **Confirm these describe what Adash offers.** |
+| No made-up statistics | The design reference has a stats row ("600+ projects"). Adash has no verified figures, so that row lists the four services instead. |
+| "What we do" has four services | Only two services were specified. "Concept development" and "Execution & coordination" come from stages named in the founder's bio. **Confirm these describe what Adash offers.** |
 | Service card text is reworded from the live About and Projects pages | Nothing new was meant to be claimed, but it isn't verbatim. **Please review it.** |
-| Nav logo places the mark and wordmark side by side | The stacked logo's wordmark was unreadable at nav size. The footer uses the original stacked logo. |
+| Nav and footer use the horizontal white logo | The stacked logo's wordmark was unreadable at nav size. |
 | Social sharing image is the logo | Stops a stock photo being shared as Adash's work. |
-| `/projects` cards have no arrow chip | There are no project detail pages to link to. |
-| `/about` keeps core values as centred icon columns | Only the homepage sections were restyled. |
+| Project links go to `/projects/#slug` | There are no project detail pages to link to. |
 | Medland has no description | The live site's text describes a home, not a hospital. |
 
 ## Test results
+
+**Out of date:** these results are from the previous design and have not been re-run since the
+redesign. The redesign has only been checked with a production build and on a phone.
 
 Measured on the local production preview, not on a live host.
 
@@ -137,13 +143,13 @@ To check that nothing is left: `grep -n "placeholder: true" src/data/projects.ts
 
 ### Content to review
 
-- The "What we do" card wording and the two added services, in `src/components/Services.astro`.
-- The tagline on each card panel, in `src/components/Services.astro` and `src/pages/index.astro`.
+- The "What we do" wording and the two added services, in `src/pages/index.astro`.
+- The new short lines written for the redesign: the hero and page-hero intros, the about and
+  philosophy headings, and the closing lines, in `src/pages/`.
 
 ### Optional next steps
 
-- Use the new card style for the core values on `/about`, if wanted.
-- Re-run Lighthouse on all pages against the deployed site.
+- Re-run Lighthouse, axe and text-contrast checks on all pages after the redesign.
 
 ## Redirects
 

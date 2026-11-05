@@ -2,7 +2,7 @@
 @import "@fontsource-variable/inter-tight";
 
 @theme {
-  --color-page: #fbfbfa;
+  --color-page: #ffffff;
   --color-ink: #111214;
   --color-muted: #6b6b6b;
   --color-sand: #e6dfb8;
@@ -51,10 +51,53 @@
   .section { padding-block: 72px; }
   @media (min-width: 1024px) { .section { padding-block: 120px; } }
 
-  .display { font-size: clamp(2.4rem, 5.2vw, 4.75rem); line-height: 1.04; }
-  .heading { font-size: clamp(2.1rem, 3.9vw, 3.5rem); }
+  /* Big uppercase grotesk headings, tightly tracked. */
+  .display, .heading {
+    font-weight: 450;
+    text-transform: uppercase;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+  }
+  .display { font-size: clamp(2.6rem, 6.4vw, 6rem); }
+  .heading { font-size: clamp(2.3rem, 5.2vw, 4.75rem); }
   .statement { font-size: clamp(1.5rem, 2.35vw, 2.125rem); line-height: 1.22; letter-spacing: -0.025em; }
-  .eyebrow { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; line-height: 1.4; }
+  .stat { font-size: clamp(2.75rem, 4.6vw, 4.25rem); line-height: 1; letter-spacing: -0.05em; }
+
+  /* Section labels read like [ABOUT US]. The brackets are hidden from screen readers. */
+  .eyebrow { font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; line-height: 1.4; }
+  .eyebrow::before { content: "[" / ""; }
+  .eyebrow::after { content: "]" / ""; }
+
+  /* Pill button with a round arrow chip on the right. */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 46px;
+    padding: 5px 5px 5px 20px;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--color-ink);
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .cta-icon {
+    display: inline-flex;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--color-ink);
+    color: #fff;
+    transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .cta:hover .cta-icon { transform: rotate(-45deg); }
+  .cta-dark { background: var(--color-ink); color: #fff; }
+  .cta-dark .cta-icon { background: #fff; color: var(--color-ink); }
 
   .btn {
     display: inline-flex;
@@ -62,7 +105,7 @@
     justify-content: center;
     min-height: 40px;
     padding: 0 18px;
-    border-radius: var(--radius-btn);
+    border-radius: 999px;
     background: var(--color-ink);
     color: #fff;
     font-size: 14px;
@@ -106,5 +149,6 @@
   .js [data-reveal] { opacity: 1; transform: none; transition: none; }
   .zoom img { transition: none; }
   .zoom:hover img, a:focus-visible .zoom img { transform: none; }
-  .btn { transition: none; }
+  .btn, .cta-icon { transition: none; }
+  .cta:hover .cta-icon { transform: none; }
 }

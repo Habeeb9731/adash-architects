@@ -1,0 +1,45 @@
+---
+import Photo from './Photo.astro';
+import type { SiteImage } from '../data/projects';
+
+interface Props {
+  image: SiteImage;
+  title: string;
+  /** Small bracketed label in the top-right corner. */
+  label: string;
+  intro?: string;
+  /** CSS object-position for the photo. */
+  focus?: string;
+}
+const { image, title, label, intro, focus = 'center' } = Astro.props;
+---
+<!-- Full-screen photo hero for inner pages. Extra content (buttons, cards) goes in the slots. -->
+<section class="page-hero relative isolate overflow-hidden bg-ink text-white" aria-labelledby="page-title">
+  <div class="absolute inset-0 -z-10">
+    <Photo image={image} sizes="100vw" eager class="page-hero-img" />
+    <div class="page-hero-shade absolute inset-0"></div>
+  </div>
+
+  <p class="eyebrow absolute right-[var(--gutter)] top-[92px] hidden text-white/80 sm:block sm:top-[104px]">{label}</p>
+
+  <div class="wrap flex h-full flex-col justify-end pb-8 sm:pb-12 lg:pb-14">
+    <div class="grid items-end gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
+      <div>
+        <h1 id="page-title" class="display max-w-[12em]">{title}</h1>
+        {intro && <p class="mt-6 max-w-[46ch] text-[15px] leading-snug text-white/85">{intro}</p>}
+        <slot />
+      </div>
+      <slot name="aside" />
+    </div>
+  </div>
+</section>
+
+<style define:vars={{ focus }}>
+  .page-hero { height: 88svh; min-height: 560px; max-height: 920px; }
+  .page-hero :global(.page-hero-img) { object-position: var(--focus); }
+  .page-hero-shade {
+    background:
+      linear-gradient(to bottom, rgb(10 10 12 / 0.55) 0, rgb(10 10 12 / 0.15) 24%, rgb(10 10 12 / 0.25) 50%, rgb(10 10 12 / 0.82) 100%),
+      rgb(10 10 12 / 0.1);
+  }
+</style>

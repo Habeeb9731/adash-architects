@@ -3,79 +3,182 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import Photo from '../components/Photo.astro';
-import Carousel from '../components/Carousel.astro';
-import Services from '../components/Services.astro';
-import CardPanel from '../components/CardPanel.astro';
-import { siteImages } from '../data/projects';
-import { CORE_VALUES, FOUNDER_NAME, FOUNDER_TITLE } from '../data/site';
+import { projects, siteImages } from '../data/projects';
+import { CORE_VALUES, FOUNDER_NAME, FOUNDER_TITLE, SITE } from '../data/site';
 import portrait from '../assets/shafeeqIcon.png';
 
+// The project pinned to the hero card. It needs a description.
+const pinned = projects.find((p) => p.slug === 'urban-commercial-tower')!;
+
+// Four projects for the staggered grid, with the layout of each slot.
+const featured = projects.slice(0, 4);
+const slots = [
+  { cls: 'md:col-span-4 md:col-start-2', aspect: 'aspect-square', sizes: '(min-width: 768px) 32vw, 92vw' },
+  { cls: 'md:col-span-5 md:col-start-7 md:mt-36', aspect: 'aspect-[4/5]', sizes: '(min-width: 768px) 40vw, 92vw' },
+  { cls: 'md:col-span-5 md:col-start-1', aspect: 'aspect-[4/5]', sizes: '(min-width: 768px) 40vw, 92vw' },
+  { cls: 'md:col-span-4 md:col-start-8 md:mt-44', aspect: 'aspect-square', sizes: '(min-width: 768px) 32vw, 92vw' },
+];
+
+// Wording comes from the live site's About page.
+const services = [
+  { title: 'Architecture & renovation', text: 'Designs that serve people better, preserving heritage while adding modern function.' },
+  { title: 'Concept development', text: 'Client meetings that listen, understand and translate your aspirations into design.' },
+  { title: 'Interiors & facades', text: 'Interiors and facades that reflect character and clarity.' },
+  { title: 'Execution & coordination', text: 'On-site coordination, with honest design and practical solutions at every stage.' },
+];
 ---
 <Base
   title="ADASH ARCHITECTS | Architecture studio in Puttur, Karnataka"
   description="Adash Architects is an architecture studio in Puttur, Karnataka, creating meaningful spaces rooted in both functionality and aesthetics."
   overHero
 >
-  <div class="relative p-2 pb-0 sm:p-3 sm:pb-0">
-    <div class="hero-frame relative">
-      <div class="absolute inset-0 overflow-hidden rounded-t-[20px] bg-[#2f6da3]">
-        <Photo image={siteImages.hero} sizes="(max-width: 900px) 820px, 100vw" eager class="object-[62%_100%] md:object-bottom" />
-        <div class="hero-scrim absolute inset-0"></div>
-        <div class="hero-fade absolute inset-x-0 bottom-0 h-[20%]"></div>
-      </div>
-      <div class="relative z-10 mx-auto flex max-w-[1100px] flex-col items-center px-5 pt-[108px] text-center text-white lg:pt-[100px]">
-        <h1 class="hero-title">Innovative design through <br class="hidden md:inline" />thoughtful architecture</h1>
-        <p class="mt-5 max-w-[34ch] text-[15px] leading-snug md:max-w-none">Meaningful spaces rooted in both functionality and aesthetics.</p>
-        <a href="/projects/" class="btn mt-7">View projects</a>
-      </div>
+  <!-- Hero -->
+  <section class="hero relative isolate overflow-hidden bg-ink text-white" aria-labelledby="hero-heading">
+    <div class="absolute inset-0 -z-10">
+      <Photo image={siteImages.hero} sizes="100vw" eager class="object-[60%_center]" />
+      <div class="hero-shade absolute inset-0"></div>
     </div>
-  </div>
 
-  <section class="pb-14 pt-10 lg:pb-20 lg:pt-16" aria-labelledby="intro-heading">
-    <div class="wrap grid gap-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-6">
-      <p class="text-sm text-muted lg:pt-2" data-reveal>Architecture studio in Puttur, Karnataka</p>
-      <div data-reveal>
-        <h2 id="intro-heading" class="statement max-w-[28em] [text-wrap:pretty]">We transform visions into tangible, inspiring spaces: functional, sustainable and deeply connected to their environment and the people who inhabit them.</h2>
+    <p class="eyebrow absolute right-[var(--gutter)] top-[92px] hidden text-white/80 sm:block sm:top-[104px]">{SITE.address.city}, {SITE.address.region}</p>
+
+    <div class="wrap flex h-full flex-col justify-end pb-8 sm:pb-12 lg:pb-14">
+      <div class="grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div>
+          <h1 id="hero-heading" class="display max-w-[12em]">“Innovative design through thoughtful architecture”</h1>
+          <p class="mt-6 max-w-[44ch] text-[15px] leading-snug text-white/85">We create meaningful spaces rooted in both functionality and aesthetics, from first sketch to finished building.</p>
+          <a href="/contact/" class="cta mt-8">
+            Start a project
+            <span class="cta-icon"><Icon name="arrow-right" size={16} /></span>
+          </a>
+        </div>
+
+        <div class="hidden lg:block">
+          <p class="mb-2 text-right text-[11px] text-white/70">01</p>
+          <a href={`/projects/#${pinned.slug}`} class="group flex gap-3 rounded-[10px] bg-white p-2 text-ink shadow-[0_20px_50px_-24px_rgb(0_0_0/0.6)]">
+            <span class="zoom relative h-[104px] w-[112px] shrink-0 overflow-hidden rounded-[6px] bg-line">
+              <Photo image={pinned.image} sizes="112px" frameAspect={1.08} />
+            </span>
+            <span class="flex min-w-0 flex-col py-0.5 pr-1">
+              <span class="text-[14px] leading-tight tracking-[-0.01em]">{pinned.name}</span>
+              <span class="mt-1 line-clamp-3 text-[11.5px] leading-snug text-muted">{pinned.description}</span>
+              <span class="mt-auto inline-flex items-center gap-1 pt-1 text-[11px] uppercase tracking-[0.04em]">
+                View <Icon name="arrow-right" size={12} class="transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
-  <Services />
-
-  <section class="wrap pt-[72px] lg:pt-[120px]" aria-label="Featured architecture photographs" data-reveal>
-    <div class="grid gap-4 sm:grid-cols-[2fr_1fr] lg:gap-5">
-      <div class="zoom relative aspect-[4/3] overflow-hidden rounded-[var(--radius-img)] bg-line sm:aspect-auto sm:h-[clamp(320px,41vw,590px)]">
-        <Photo image={siteImages.pairLarge} sizes="(min-width: 640px) 66vw, 100vw" />
-      </div>
-      <div class="zoom relative aspect-[4/3] overflow-hidden rounded-[var(--radius-img)] bg-line sm:aspect-auto sm:h-[clamp(320px,41vw,590px)]">
-        <Photo image={siteImages.pairSmall} sizes="(min-width: 640px) 33vw, 100vw" />
-      </div>
-    </div>
-  </section>
-
-  <Carousel />
-
-  <CardPanel
-    id="why-heading"
-    eyebrow="Why choose us"
-    heading="Great architecture is a dialogue"
-    label="Our core values"
-    pill={{ label: 'About us', ariaLabel: 'Read more about Adash Architects', href: '/about/' }}
-    tagline="We strive to listen, understand, and translate your aspirations into designs."
-    items={CORE_VALUES}
-  />
-
-  <section class="section" aria-labelledby="lasting-heading">
+  <!-- About -->
+  <section class="section" aria-labelledby="about-heading">
     <div class="wrap">
-      <h2 id="lasting-heading" class="heading max-w-[15em]" data-reveal>Every project is a chance to contribute something lasting</h2>
-      <div class="zoom relative mt-10 aspect-[4/3] overflow-hidden rounded-[20px] bg-line sm:aspect-[16/9] lg:mt-16" data-reveal>
-        <Photo image={siteImages.feature} sizes="(min-width: 1440px) 1320px, 94vw" frameAspect={1.33} />
+      <div class="flex items-start justify-between gap-6" data-reveal>
+        <h2 id="about-heading" class="heading max-w-[13em]"><span class="inline-block w-[1.1em]" aria-hidden="true"></span>We turn visions into inspiring spaces —</h2>
+        <p class="eyebrow mt-2 hidden shrink-0 sm:block">About us</p>
+      </div>
+
+      <div class="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-12 lg:items-end lg:gap-6" data-reveal>
+        <div class="order-last lg:order-none lg:col-span-4">
+          <a href="/about/" class="cta cta-dark">
+            Learn more
+            <span class="cta-icon"><Icon name="arrow-right" size={16} /></span>
+          </a>
+        </div>
+        <div class="zoom relative aspect-[4/3] overflow-hidden rounded-[8px] bg-line lg:col-span-4">
+          <Photo image={siteImages.pairLarge} sizes="(min-width: 1024px) 32vw, 92vw" />
+        </div>
+        <div class="space-y-5 text-[15px] leading-relaxed text-muted lg:col-span-4 lg:pl-4">
+          <p>We transform visions into tangible, inspiring spaces: functional, sustainable and deeply connected to their environment and the people who inhabit them.</p>
+          <p>Great architecture is a dialogue. We listen, understand and translate your aspirations into designs, with meticulous attention to detail and a collaborative approach.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="section !pt-0" aria-labelledby="founder-heading">
-    <div class="wrap grid items-center gap-8 md:grid-cols-[minmax(0,360px)_minmax(0,1fr)] md:gap-16 lg:gap-24" data-reveal>
+  <!-- Services row -->
+  <section class="wrap pb-[72px] lg:pb-[120px]" aria-labelledby="services-heading">
+    <h2 id="services-heading" class="eyebrow">What we do</h2>
+    <ul class="mt-8 grid gap-x-6 gap-y-12 border-t border-line pt-8 sm:grid-cols-2 lg:grid-cols-4" data-reveal>
+      {services.map((s, i) => (
+        <li>
+          <h3 class="text-[13px] tracking-normal">{s.title}</h3>
+          <p class="stat mt-4" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+          <p class="mt-4 max-w-[30ch] text-[13px] leading-relaxed text-muted">{s.text}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Featured projects -->
+  <section class="section !pt-0" aria-labelledby="projects-heading">
+    <div class="wrap">
+      <div class="flex items-start justify-between gap-6" data-reveal>
+        <h2 id="projects-heading" class="heading">Featured<br />projects</h2>
+        <p class="eyebrow mt-2 hidden shrink-0 sm:block">Our projects</p>
+      </div>
+
+      <ul class="mt-14 grid gap-x-6 gap-y-14 md:grid-cols-12 lg:mt-20 lg:gap-y-20">
+        {featured.map((project, i) => (
+          <li class={slots[i].cls} data-reveal>
+            <a href={`/projects/#${project.slug}`} class="group block rounded-[8px]">
+              <div class={`zoom relative overflow-hidden rounded-[8px] bg-line ${slots[i].aspect}`}>
+                <Photo image={project.image} sizes={slots[i].sizes} frameAspect={slots[i].aspect === 'aspect-square' ? 1 : 0.8} />
+              </div>
+              <div class="mt-3 flex items-baseline justify-between gap-4">
+                <h3 class="text-[15px] tracking-[-0.01em] group-hover:underline underline-offset-4">{project.name}</h3>
+                <span class="shrink-0 text-[12px] uppercase tracking-[0.04em] text-muted">{project.type}</span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-16 flex justify-center lg:mt-20">
+        <a href="/projects/" class="cta cta-dark">
+          View all projects
+          <span class="cta-icon"><Icon name="arrow-right" size={16} /></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core values -->
+  <section class="section bg-ink text-white" aria-labelledby="values-heading">
+    <div class="wrap">
+      <div class="flex items-start justify-between gap-6" data-reveal>
+        <h2 id="values-heading" class="heading">Why choose us</h2>
+        <p class="eyebrow mt-2 hidden shrink-0 text-white/60 sm:block">Core values</p>
+      </div>
+      <p class="mt-6 max-w-[40ch] text-white/70" data-reveal>We strive to listen, understand and translate your aspirations into designs that exceed expectations.</p>
+
+      <ul class="mt-14 border-t border-white/15 lg:mt-20" data-reveal>
+        {CORE_VALUES.map((value, i) => (
+          <li class="grid gap-3 border-b border-white/15 py-7 md:grid-cols-12 md:items-baseline md:gap-6 lg:py-9">
+            <span class="text-[12px] text-white/50 md:col-span-1" aria-hidden="true">[{String(i + 1).padStart(2, '0')}]</span>
+            <h3 class="text-[clamp(1.6rem,2.8vw,2.5rem)] uppercase leading-none tracking-[-0.04em] md:col-span-5">{value.title}</h3>
+            <p class="max-w-[46ch] text-[14px] text-white/65 md:col-span-5 md:col-start-8">{value.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Feature image -->
+  <section class="feature relative isolate overflow-hidden text-white" aria-labelledby="lasting-heading">
+    <div class="absolute inset-0 -z-10">
+      <Photo image={siteImages.feature} sizes="100vw" />
+      <div class="feature-shade absolute inset-0"></div>
+    </div>
+    <div class="wrap flex h-full items-end pb-10 lg:pb-16">
+      <h2 id="lasting-heading" class="heading max-w-[14em]" data-reveal>Every project is a chance to contribute something lasting</h2>
+    </div>
+  </section>
+
+  <!-- Founder -->
+  <section class="section" aria-labelledby="founder-heading">
+    <div class="wrap grid items-end gap-10 md:grid-cols-12 md:gap-6" data-reveal>
       <Image
         src={portrait}
         alt={`Portrait of ${FOUNDER_NAME}`}
@@ -83,58 +186,36 @@ import portrait from '../assets/shafeeqIcon.png';
         sizes="(min-width: 768px) 360px, 90vw"
         format="webp"
         loading="lazy"
-        class="aspect-square w-full max-w-[360px] rounded-[var(--radius-img)] object-cover"
+        class="aspect-[4/5] w-full max-w-[360px] rounded-[8px] object-cover md:col-span-4"
       />
-      <div>
+      <div class="md:col-span-7 md:col-start-6">
         <p class="eyebrow">The founder</p>
-        <blockquote class="statement mt-5 max-w-[26em] [text-wrap:pretty]">“My commitment lies in honest design, practical solutions, and a deep respect for the craft of architecture.”</blockquote>
-        <h2 id="founder-heading" class="mt-7 text-[17px] tracking-[-0.02em]">{FOUNDER_NAME}</h2>
-        <p class="mt-1 text-sm text-muted">{FOUNDER_TITLE}</p>
-        <a href="/about/" class="text-link mt-6 inline-block rounded-[4px] text-sm">Read more about {FOUNDER_NAME}</a>
+        <blockquote class="statement mt-6 [text-wrap:pretty]">“My commitment lies in honest design, practical solutions, and a deep respect for the craft of architecture.”</blockquote>
+        <div class="mt-8 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-6">
+          <div>
+            <h2 id="founder-heading" class="text-[17px] uppercase tracking-[-0.01em]">{FOUNDER_NAME}</h2>
+            <p class="mt-1 text-sm text-muted">{FOUNDER_TITLE}</p>
+          </div>
+          <a href="/about/" class="cta cta-dark">
+            Read more
+            <span class="cta-icon"><Icon name="arrow-right" size={16} /></span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
-  /* Keeps white hero text and nav at AA contrast whatever photo is used. */
-  .hero-scrim {
-    background: linear-gradient(to bottom,
-      rgb(8 44 92 / 0.6) 0,
-      rgb(8 44 92 / 0.59) 310px,
-      rgb(8 44 92 / 0.3) 380px,
-      rgb(8 44 92 / 0.12) 460px,
-      rgb(8 44 92 / 0) 540px);
+  .hero { height: 100svh; min-height: 640px; max-height: 1000px; }
+  /* Keeps white text readable whatever photo sits behind it. */
+  .hero-shade {
+    background:
+      linear-gradient(to bottom, rgb(10 10 12 / 0.55) 0, rgb(10 10 12 / 0.2) 22%, rgb(10 10 12 / 0.25) 45%, rgb(10 10 12 / 0.82) 100%),
+      rgb(10 10 12 / 0.12);
   }
-  .hero-title {
-    font-size: clamp(2.4rem, 5.2vw, 5rem);
-    line-height: 1.04;
-  }
-  .hero-frame { height: 800px; }
-
-  /* On desktop the hero fits the screen. The photo is pinned so its roofline sits at
-     --hero-roof, just below the button, at any size. 0.488 and 0.4475 are the shares of the
-     photo's width above and below the roof, so update them when hero.jpg is replaced. */
-  @media (min-width: 1024px) {
-    .hero-frame {
-      --hero-roof: 430px;
-      --hero-width: calc(100vw - 24px);
-      height: clamp(640px, calc(100svh - 48px), calc(var(--hero-roof) + 0.4475 * var(--hero-width)));
-    }
-    .hero-frame :global(img) {
-      object-position: 50% calc(var(--hero-roof) - 0.488 * var(--hero-width));
-    }
-    .hero-scrim {
-      background: linear-gradient(to bottom,
-        rgb(8 44 92 / 0.6) 0,
-        rgb(8 44 92 / 0.59) 350px,
-        rgb(8 44 92 / 0.36) 410px,
-        rgb(8 44 92 / 0.16) 470px,
-        rgb(8 44 92 / 0.05) 530px,
-        rgb(8 44 92 / 0) 590px);
-    }
-  }
-  .hero-fade {
-    background: linear-gradient(to bottom, rgb(251 251 250 / 0) 0%, rgb(251 251 250 / 0.55) 48%, rgb(251 251 250 / 0.92) 78%, #fbfbfa 100%);
+  .feature { height: 86svh; min-height: 480px; max-height: 900px; }
+  .feature-shade {
+    background: linear-gradient(to bottom, rgb(10 10 12 / 0) 35%, rgb(10 10 12 / 0.75) 100%);
   }
 </style>

@@ -2,70 +2,82 @@
 import Icon from './Icon.astro';
 import { NAV } from '../data/site';
 
-interface Props { overHero?: boolean }
-const { overHero = false } = Astro.props;
 const path = Astro.url.pathname.replace(/\/?$/, '/');
-const logo = overHero ? '/images/brand/logo-horizontal-white.png' : '/images/brand/logo-horizontal-black.png';
-const linkColor = overHero ? 'text-white' : 'text-ink';
 ---
-<header class:list={['z-30', overHero ? 'absolute inset-x-2 top-2 sm:inset-x-3 sm:top-3' : 'relative w-full']}>
-  <div class:list={['relative flex h-[76px] items-center justify-between gap-4 lg:grid lg:h-[84px] lg:grid-cols-[1fr_auto_1fr]', overHero ? 'w-full px-4 sm:px-6 lg:px-8' : 'wrap']}>
-    <a href="/" class="inline-flex w-fit items-center rounded-[6px]" aria-label="Adash Architects, home">
-      <img src={logo} alt="" width="903" height="319" class="h-9 w-auto" />
-    </a>
+<!-- A floating dark pill, centred at the top of every page. -->
+<header class="pointer-events-none fixed inset-x-0 top-3 z-40 flex justify-center px-4 sm:top-4">
+  <div class="pointer-events-auto relative">
+    <div class="nav-pill flex items-center gap-2 rounded-full py-1.5 pl-5 pr-1.5 text-white">
+      <a href="/" class="inline-flex shrink-0 items-center rounded-[6px]" aria-label="Adash Architects, home">
+        <img src="/images/brand/logo-horizontal-white.png" alt="" width="903" height="319" class="h-7 w-auto" />
+      </a>
 
-    <nav aria-label="Primary" class="hidden md:block">
-      <ul class={`flex items-center gap-7 text-sm lg:gap-9 ${linkColor}`}>
-        {NAV.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              aria-current={path === item.href ? 'page' : undefined}
-              class="rounded-[4px] py-1 underline-offset-[6px] decoration-1 hover:underline aria-[current=page]:underline"
-            >{item.label}</a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-
-    <div class="hidden justify-end md:flex">
-      <a href="/contact/" class="btn">Start a project</a>
-    </div>
-
-    <button
-      type="button"
-      class="btn group !px-0 w-10 md:hidden"
-      data-nav-toggle
-      aria-expanded="false"
-      aria-controls="mobile-nav"
-      aria-label="Open menu"
-    >
-      <span class="inline-flex group-aria-expanded:hidden"><Icon name="menu" size={20} /></span>
-      <span class="hidden group-aria-expanded:inline-flex"><Icon name="x" size={20} /></span>
-    </button>
-
-    <div
-      id="mobile-nav"
-      hidden
-      class="absolute inset-x-3 top-[70px] rounded-[16px] border border-line bg-page p-3 shadow-[0_20px_50px_-20px_rgb(17_18_20/0.35)] md:hidden"
-    >
-      <nav aria-label="Mobile">
-        <ul class="text-ink">
+      <nav aria-label="Primary" class="hidden md:block">
+        <ul class="ml-6 mr-3 flex items-center gap-1 text-[12.5px] uppercase tracking-[0.04em]">
           {NAV.map((item) => (
             <li>
               <a
                 href={item.href}
                 aria-current={path === item.href ? 'page' : undefined}
-                class="block rounded-[8px] px-3 py-3 text-[17px] tracking-[-0.01em] hover:bg-line aria-[current=page]:underline underline-offset-4"
+                class="block rounded-full px-3 py-2 text-white/75 transition-colors hover:text-white aria-[current=page]:text-white aria-[current=page]:bg-white/12"
               >{item.label}</a>
             </li>
           ))}
         </ul>
-        <a href="/contact/" class="btn mt-2 w-full">Start a project</a>
+      </nav>
+
+      <a href="/contact/" class="hidden size-9 items-center justify-center rounded-full bg-white text-ink md:inline-flex" aria-label="Start a project">
+        <Icon name="arrow-up-right" size={17} />
+      </a>
+
+      <button
+        type="button"
+        class="group ml-4 inline-flex size-9 items-center justify-center rounded-full bg-white text-ink md:hidden"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label="Open menu"
+      >
+        <span class="inline-flex group-aria-expanded:hidden"><Icon name="menu" size={18} /></span>
+        <span class="hidden group-aria-expanded:inline-flex"><Icon name="x" size={18} /></span>
+      </button>
+    </div>
+
+    <div
+      id="mobile-nav"
+      hidden
+      class="nav-pill absolute left-1/2 top-[calc(100%+8px)] w-[min(calc(100vw-32px),340px)] -translate-x-1/2 rounded-[22px] p-3 text-white md:hidden"
+    >
+      <nav aria-label="Mobile">
+        <ul>
+          {NAV.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={path === item.href ? 'page' : undefined}
+                class="block rounded-[12px] px-3 py-3 text-[22px] uppercase tracking-[-0.03em] hover:bg-white/10 aria-[current=page]:bg-white/12"
+              >{item.label}</a>
+            </li>
+          ))}
+        </ul>
+        <a href="/contact/" class="cta mt-3 w-full justify-between">
+          Start a project
+          <span class="cta-icon"><Icon name="arrow-right" size={16} /></span>
+        </a>
       </nav>
     </div>
   </div>
 </header>
+
+<style>
+  .nav-pill {
+    background: rgb(17 18 20 / 0.62);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: 0 12px 40px -16px rgb(0 0 0 / 0.45);
+  }
+</style>
 
 <script>
   const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');

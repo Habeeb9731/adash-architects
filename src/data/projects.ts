@@ -119,4 +119,20 @@ export const siteImages = {
     alt: 'a dark timber house lit from within, beneath a large tree',
     placeholder: true,
   },
+  // Page heroes. Each inner page uses a different photo from the homepage.
+  projectsHero: {
+    file: 'services-architecture.jpg',
+    alt: 'a white angular building with a glass facade, seen against a pale sky',
+    placeholder: true,
+  },
+  aboutHero: {
+    file: 'historic-building-renovation.jpg',
+    alt: 'a stone manor house surrounded by trees, reflected in a pond',
+    placeholder: true,
+  },
+  contactHero: {
+    file: 'mixed-use-urban-development.jpg',
+    alt: 'an apartment block with balconies seen from below',
+    placeholder: true,
+  },
 } satisfies Record<string, SiteImage>;

@@ -218,12 +218,44 @@
   100% { transform: none; }
 }
 
-/* Soft crossfade between pages, in browsers that support it. */
-@view-transition { navigation: auto; }
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.45s;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+/* Page transition: a dark curtain covers the page when a link is clicked, then lifts
+   off the next page once its hero photo is ready. Driven by src/scripts/motion.ts. */
+.page-curtain { display: none; }
+.js .page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-ink);
+  pointer-events: none;
+}
+.page-curtain img { height: 34px; width: auto; }
+.js.is-loaded .page-curtain {
+  transform: translateY(-100%);
+  transition: transform 0.95s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.js.is-loaded .page-curtain img {
+  transform: translateY(40px);
+  opacity: 0;
+  transition: transform 0.95s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.4s ease;
+}
+.js.is-leaving .page-curtain { animation: curtain-in 0.65s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
+.js.is-leaving .page-curtain img { animation: curtain-logo-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+/* If scripts stall, never leave the page covered. */
+.js:not(.is-loaded) .page-curtain { animation: curtain-failsafe 0.8s cubic-bezier(0.76, 0, 0.24, 1) 3s forwards; }
+
+@keyframes curtain-in {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes curtain-logo-in {
+  from { transform: translateY(24px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+@keyframes curtain-failsafe {
+  to { transform: translateY(-100%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -236,7 +268,7 @@
   [data-parallax] { transform: none !important; }
   .cta:hover .cta-icon svg { animation: none; }
   .cta:hover .cta-icon { transform: none; }
-  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+  .js .page-curtain { display: none; }
   .zoom img { transition: none; }
   .zoom:hover img, a:focus-visible .zoom img { transform: none; }
   .btn, .cta-icon { transition: none; }

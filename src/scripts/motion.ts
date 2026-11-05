@@ -79,8 +79,33 @@ if (reduced) {
     watched.forEach((el) => el.classList.add('is-in'));
   }
 
-  // Start the hero sequence once the first frame has painted.
-  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-loaded')));
+  // Lift the curtain and start the hero sequence once the hero photo is decoded,
+  // so the page never opens on a half-loaded image. Never wait more than 1.2s.
+  const heroImg = document.querySelector<HTMLImageElement>('[data-hero-photo] img');
+  const ready = heroImg ? heroImg.decode().catch(() => {}) : Promise.resolve();
+  Promise.race([ready, new Promise((r) => setTimeout(r, 1200))]).then(() => {
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-loaded')));
+  });
+
+  // Page transitions: cover the page with the curtain, then navigate.
+  const LEAVE_MS = 650;
+  document.addEventListener('click', (e) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const link = (e.target as Element).closest?.('a');
+    if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin) return;
+    // Same page (including #anchors): let the browser scroll normally.
+    if (url.pathname === location.pathname && url.search === location.search) return;
+    e.preventDefault();
+    root.classList.add('is-leaving');
+    setTimeout(() => { location.href = url.href; }, LEAVE_MS);
+  });
+
+  // Coming back via the back button restores the page from cache with the curtain down.
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) root.classList.remove('is-leaving');
+  });
 
   // Parallax: one rAF loop, only while something is on screen.
   const layers = [...document.querySelectorAll<HTMLElement>('[data-parallax]')];

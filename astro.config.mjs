@@ -5,6 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://adasharchitects.com',
   output: 'static',
+  // Start loading a page as soon as its link is hovered or tapped.
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   redirects: {
     '/projects.html': '/projects/',
     '/aboutus.html': '/about/',

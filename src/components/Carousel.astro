@@ -1,0 +1,34 @@
+---
+import Icon from './Icon.astro';
+import ProjectCard from './ProjectCard.astro';
+import { projects } from '../data/projects';
+---
+<section class="section" aria-labelledby="projects-heading">
+  <div class="wrap" data-reveal>
+    <p class="eyebrow">Projects</p>
+    <h2 id="projects-heading" class="heading mt-4">Explore our work</h2>
+  </div>
+
+  <div data-carousel class="mt-10 lg:mt-14" role="group" aria-roledescription="carousel" aria-label="Adash Architects projects">
+    <ul
+      data-track
+      class="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto py-1.5 lg:gap-5"
+      style="padding-inline: max(var(--gutter), calc((100% - 1320px) / 2)); scroll-padding-inline: max(var(--gutter), calc((100% - 1320px) / 2));"
+    >
+      {projects.map((project) => (
+        <li data-slide class="w-[min(82vw,340px)] shrink-0 snap-start lg:w-[410px]">
+          <ProjectCard project={project} href={`/projects/#${project.slug}`} sizes="(min-width: 1024px) 410px, min(82vw, 340px)" />
+        </li>
+      ))}
+    </ul>
+
+    <div class="mt-8 flex justify-center gap-2">
+      <button type="button" data-prev class="btn !px-0 w-10 aria-disabled:cursor-default aria-disabled:!bg-[#c9c9c6] aria-disabled:!text-ink" aria-label="Previous project" aria-disabled="true"><Icon name="arrow-left" /></button>
+      <button type="button" data-next class="btn !px-0 w-10 aria-disabled:cursor-default aria-disabled:!bg-[#c9c9c6] aria-disabled:!text-ink" aria-label="Next project"><Icon name="arrow-right" /></button>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/carousel';
+</script>

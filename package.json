@@ -1,0 +1,25 @@
+{
+  "name": "adash-architects",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "images": "node scripts/optimize-images.mjs",
+    "predev": "node scripts/optimize-images.mjs",
+    "dev": "astro dev",
+    "prebuild": "node scripts/optimize-images.mjs",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/inter-tight": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.4",
+    "astro": "^7.4.5",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.3.4"
+  },
+  "devDependencies": {
+    "lucide-static": "^1.68.0"
+  }
+}

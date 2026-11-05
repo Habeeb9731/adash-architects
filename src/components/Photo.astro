@@ -1,0 +1,43 @@
+---
+import manifest from '../data/image-manifest.json';
+import type { SiteImage } from '../data/projects';
+
+interface Props {
+  image: SiteImage;
+  sizes: string;
+  eager?: boolean;
+  class?: string;
+  /** Width / height of the frame, when object-cover draws the image wider than its frame. */
+  frameAspect?: number;
+}
+
+const { image, sizes, eager = false, class: className = '', frameAspect } = Astro.props;
+const entry = (manifest as Record<string, { width: number; height: number; variants: { w: number; src: string }[] }>)[image.file];
+if (!entry) throw new Error(`No image named "${image.file}" in /public/images/projects/. Run npm run images.`);
+
+// A landscape photo in a portrait frame renders wider than the frame, so scale `sizes` to match.
+const scale = frameAspect ? entry.width / entry.height / frameAspect : 1;
+const adjustedSizes = scale > 1
+  ? sizes.split(/,(?![^(]*\))/).map((part) => {
+      const [, condition = '', value] = part.trim().match(/^(\([^)]*\)\s+)?(.*)$/)!;
+      return `${condition}calc(${value} * ${scale.toFixed(2)})`;
+    }).join(', ')
+  : sizes;
+
+const srcset = entry.variants.map((v) => `${v.src} ${v.w}w`).join(', ');
+const fallback = (entry.variants.find((v) => v.w >= 1200) ?? entry.variants[entry.variants.length - 1]).src;
+// Placeholder alt text always says so, so stock photos are never described as Adash's work.
+const alt = image.placeholder ? `Placeholder stock photo, not Adash's work: ${image.alt}` : image.alt;
+---
+<img
+  src={fallback}
+  srcset={srcset}
+  sizes={adjustedSizes}
+  width={entry.width}
+  height={entry.height}
+  alt={alt}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding={eager ? 'auto' : 'async'}
+  fetchpriority={eager ? 'high' : undefined}
+  class={`h-full w-full object-cover ${className}`}
+/>

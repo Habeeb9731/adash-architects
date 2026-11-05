@@ -1,0 +1,140 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
+import Carousel from '../components/Carousel.astro';
+import Services from '../components/Services.astro';
+import CardPanel from '../components/CardPanel.astro';
+import { siteImages } from '../data/projects';
+import { CORE_VALUES, FOUNDER_NAME, FOUNDER_TITLE } from '../data/site';
+import portrait from '../assets/shafeeqIcon.png';
+
+---
+<Base
+  title="ADASH ARCHITECTS | Architecture studio in Puttur, Karnataka"
+  description="Adash Architects is an architecture studio in Puttur, Karnataka, creating meaningful spaces rooted in both functionality and aesthetics."
+  overHero
+>
+  <div class="relative p-2 pb-0 sm:p-3 sm:pb-0">
+    <div class="hero-frame relative">
+      <div class="absolute inset-0 overflow-hidden rounded-t-[20px] bg-[#2f6da3]">
+        <Photo image={siteImages.hero} sizes="(max-width: 900px) 820px, 100vw" eager class="object-[62%_100%] md:object-bottom" />
+        <div class="hero-scrim absolute inset-0"></div>
+        <div class="hero-fade absolute inset-x-0 bottom-0 h-[20%]"></div>
+      </div>
+      <div class="relative z-10 mx-auto flex max-w-[1100px] flex-col items-center px-5 pt-[108px] text-center text-white lg:pt-[100px]">
+        <h1 class="hero-title">Innovative design through <br class="hidden md:inline" />thoughtful architecture</h1>
+        <p class="mt-5 max-w-[34ch] text-[15px] leading-snug md:max-w-none">Meaningful spaces rooted in both functionality and aesthetics.</p>
+        <a href="/projects/" class="btn mt-7">View projects</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="pb-14 pt-10 lg:pb-20 lg:pt-16" aria-labelledby="intro-heading">
+    <div class="wrap grid gap-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-6">
+      <p class="text-sm text-muted lg:pt-2" data-reveal>Architecture studio in Puttur, Karnataka</p>
+      <div data-reveal>
+        <h2 id="intro-heading" class="statement max-w-[28em] [text-wrap:pretty]">We transform visions into tangible, inspiring spaces: functional, sustainable and deeply connected to their environment and the people who inhabit them.</h2>
+      </div>
+    </div>
+  </section>
+
+  <Services />
+
+  <section class="wrap pt-[72px] lg:pt-[120px]" aria-label="Featured architecture photographs" data-reveal>
+    <div class="grid gap-4 sm:grid-cols-[2fr_1fr] lg:gap-5">
+      <div class="zoom relative aspect-[4/3] overflow-hidden rounded-[var(--radius-img)] bg-line sm:aspect-auto sm:h-[clamp(320px,41vw,590px)]">
+        <Photo image={siteImages.pairLarge} sizes="(min-width: 640px) 66vw, 100vw" />
+      </div>
+      <div class="zoom relative aspect-[4/3] overflow-hidden rounded-[var(--radius-img)] bg-line sm:aspect-auto sm:h-[clamp(320px,41vw,590px)]">
+        <Photo image={siteImages.pairSmall} sizes="(min-width: 640px) 33vw, 100vw" />
+      </div>
+    </div>
+  </section>
+
+  <Carousel />
+
+  <CardPanel
+    id="why-heading"
+    eyebrow="Why choose us"
+    heading="Great architecture is a dialogue"
+    label="Our core values"
+    pill={{ label: 'About us', ariaLabel: 'Read more about Adash Architects', href: '/about/' }}
+    tagline="We strive to listen, understand, and translate your aspirations into designs."
+    items={CORE_VALUES}
+  />
+
+  <section class="section" aria-labelledby="lasting-heading">
+    <div class="wrap">
+      <h2 id="lasting-heading" class="heading max-w-[15em]" data-reveal>Every project is a chance to contribute something lasting</h2>
+      <div class="zoom relative mt-10 aspect-[4/3] overflow-hidden rounded-[20px] bg-line sm:aspect-[16/9] lg:mt-16" data-reveal>
+        <Photo image={siteImages.feature} sizes="(min-width: 1440px) 1320px, 94vw" frameAspect={1.33} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section !pt-0" aria-labelledby="founder-heading">
+    <div class="wrap grid items-center gap-8 md:grid-cols-[minmax(0,360px)_minmax(0,1fr)] md:gap-16 lg:gap-24" data-reveal>
+      <Image
+        src={portrait}
+        alt={`Portrait of ${FOUNDER_NAME}`}
+        widths={[320, 500]}
+        sizes="(min-width: 768px) 360px, 90vw"
+        format="webp"
+        loading="lazy"
+        class="aspect-square w-full max-w-[360px] rounded-[var(--radius-img)] object-cover"
+      />
+      <div>
+        <p class="eyebrow">The founder</p>
+        <blockquote class="statement mt-5 max-w-[26em] [text-wrap:pretty]">“My commitment lies in honest design, practical solutions, and a deep respect for the craft of architecture.”</blockquote>
+        <h2 id="founder-heading" class="mt-7 text-[17px] tracking-[-0.02em]">{FOUNDER_NAME}</h2>
+        <p class="mt-1 text-sm text-muted">{FOUNDER_TITLE}</p>
+        <a href="/about/" class="text-link mt-6 inline-block rounded-[4px] text-sm">Read more about {FOUNDER_NAME}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Keeps white hero text and nav at AA contrast whatever photo is used. */
+  .hero-scrim {
+    background: linear-gradient(to bottom,
+      rgb(8 44 92 / 0.6) 0,
+      rgb(8 44 92 / 0.59) 310px,
+      rgb(8 44 92 / 0.3) 380px,
+      rgb(8 44 92 / 0.12) 460px,
+      rgb(8 44 92 / 0) 540px);
+  }
+  .hero-title {
+    font-size: clamp(2.4rem, 5.2vw, 5rem);
+    line-height: 1.04;
+  }
+  .hero-frame { height: 800px; }
+
+  /* On desktop the hero fits the screen. The photo is pinned so its roofline sits at
+     --hero-roof, just below the button, at any size. 0.488 and 0.4475 are the shares of the
+     photo's width above and below the roof, so update them when hero.jpg is replaced. */
+  @media (min-width: 1024px) {
+    .hero-frame {
+      --hero-roof: 430px;
+      --hero-width: calc(100vw - 24px);
+      height: clamp(640px, calc(100svh - 48px), calc(var(--hero-roof) + 0.4475 * var(--hero-width)));
+    }
+    .hero-frame :global(img) {
+      object-position: 50% calc(var(--hero-roof) - 0.488 * var(--hero-width));
+    }
+    .hero-scrim {
+      background: linear-gradient(to bottom,
+        rgb(8 44 92 / 0.6) 0,
+        rgb(8 44 92 / 0.59) 350px,
+        rgb(8 44 92 / 0.36) 410px,
+        rgb(8 44 92 / 0.16) 470px,
+        rgb(8 44 92 / 0.05) 530px,
+        rgb(8 44 92 / 0) 590px);
+    }
+  }
+  .hero-fade {
+    background: linear-gradient(to bottom, rgb(251 251 250 / 0) 0%, rgb(251 251 250 / 0.55) 48%, rgb(251 251 250 / 0.92) 78%, #fbfbfa 100%);
+  }
+</style>

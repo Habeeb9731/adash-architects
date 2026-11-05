@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
+---
+<Base
+  title="Our Projects | ADASH ARCHITECTS"
+  description="Explore a selection of innovative architectural designs by Adash Architects, across healthcare, commercial, civic, hospitality, renovation and mixed-use work."
+>
+  <section class="wrap pb-12 pt-10 lg:pb-16 lg:pt-20">
+    <p class="eyebrow">Projects</p>
+    <h1 class="display mt-4">Our Projects</h1>
+    <p class="mt-5 max-w-[46ch] text-muted">Explore a selection of our innovative architectural designs and completed projects.</p>
+  </section>
+  <section class="wrap pb-[72px] lg:pb-[120px]" aria-label="Project list">
+    <ul class="grid gap-x-5 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map((project) => (
+        <li id={project.slug} class="scroll-mt-6" data-reveal>
+          <ProjectCard project={project} headingLevel="h2" sizes="(min-width: 1024px) 31vw, (min-width: 640px) 47vw, 92vw" />
+          {project.description && <p class="mt-4 text-sm text-muted">{project.description}</p>}
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>

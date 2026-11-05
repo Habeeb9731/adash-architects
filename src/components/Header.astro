@@ -1,0 +1,88 @@
+---
+import Icon from './Icon.astro';
+import { NAV } from '../data/site';
+
+interface Props { overHero?: boolean }
+const { overHero = false } = Astro.props;
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const logo = overHero ? '/images/brand/logo-horizontal-white.png' : '/images/brand/logo-horizontal-black.png';
+const linkColor = overHero ? 'text-white' : 'text-ink';
+---
+<header class:list={['z-30', overHero ? 'absolute inset-x-2 top-2 sm:inset-x-3 sm:top-3' : 'relative w-full']}>
+  <div class:list={['relative flex h-[76px] items-center justify-between gap-4 lg:grid lg:h-[84px] lg:grid-cols-[1fr_auto_1fr]', overHero ? 'w-full px-4 sm:px-6 lg:px-8' : 'wrap']}>
+    <a href="/" class="inline-flex w-fit items-center rounded-[6px]" aria-label="Adash Architects, home">
+      <img src={logo} alt="" width="903" height="319" class="h-9 w-auto" />
+    </a>
+
+    <nav aria-label="Primary" class="hidden md:block">
+      <ul class={`flex items-center gap-7 text-sm lg:gap-9 ${linkColor}`}>
+        {NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={path === item.href ? 'page' : undefined}
+              class="rounded-[4px] py-1 underline-offset-[6px] decoration-1 hover:underline aria-[current=page]:underline"
+            >{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="hidden justify-end md:flex">
+      <a href="/contact/" class="btn">Start a project</a>
+    </div>
+
+    <button
+      type="button"
+      class="btn group !px-0 w-10 md:hidden"
+      data-nav-toggle
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      aria-label="Open menu"
+    >
+      <span class="inline-flex group-aria-expanded:hidden"><Icon name="menu" size={20} /></span>
+      <span class="hidden group-aria-expanded:inline-flex"><Icon name="x" size={20} /></span>
+    </button>
+
+    <div
+      id="mobile-nav"
+      hidden
+      class="absolute inset-x-3 top-[70px] rounded-[16px] border border-line bg-page p-3 shadow-[0_20px_50px_-20px_rgb(17_18_20/0.35)] md:hidden"
+    >
+      <nav aria-label="Mobile">
+        <ul class="text-ink">
+          {NAV.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={path === item.href ? 'page' : undefined}
+                class="block rounded-[8px] px-3 py-3 text-[17px] tracking-[-0.01em] hover:bg-line aria-[current=page]:underline underline-offset-4"
+              >{item.label}</a>
+            </li>
+          ))}
+        </ul>
+        <a href="/contact/" class="btn mt-2 w-full">Start a project</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const panel = document.getElementById('mobile-nav');
+  if (toggle && panel) {
+    const set = (open: boolean) => {
+      panel.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    };
+    toggle.addEventListener('click', () => set(panel.hidden));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) { set(false); toggle.focus(); }
+    });
+    document.addEventListener('click', (e) => {
+      const t = e.target as Node;
+      if (!panel.hidden && !panel.contains(t) && !toggle.contains(t)) set(false);
+    });
+  }
+</script>

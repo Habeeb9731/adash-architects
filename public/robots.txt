@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://adasharchitects.com/sitemap-index.xml

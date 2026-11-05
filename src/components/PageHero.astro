@@ -15,21 +15,23 @@ const { image, title, label, intro, focus = 'center' } = Astro.props;
 ---
 <!-- Full-screen photo hero for inner pages. Extra content (buttons, cards) goes in the slots. -->
 <section class="page-hero relative isolate overflow-hidden bg-ink text-white" aria-labelledby="page-title">
-  <div class="absolute inset-0 -z-10">
-    <Photo image={image} sizes="100vw" eager class="page-hero-img" />
+  <div class="absolute inset-0 -z-10 overflow-hidden">
+    <div class="absolute inset-0" data-parallax="hero" data-hero-photo>
+      <Photo image={image} sizes="100vw" eager class="page-hero-img" />
+    </div>
     <div class="page-hero-shade absolute inset-0"></div>
   </div>
 
-  <p class="eyebrow absolute right-[var(--gutter)] top-[92px] hidden text-white/80 sm:block sm:top-[104px]">{label}</p>
+  <p class="eyebrow absolute right-[var(--gutter)] top-[92px] hidden text-white/80 sm:block sm:top-[104px]" data-hero-in style="--d: 1000ms">{label}</p>
 
   <div class="wrap flex h-full flex-col justify-end pb-8 sm:pb-12 lg:pb-14">
     <div class="grid items-end gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
       <div>
-        <h1 id="page-title" class="display max-w-[12em]">{title}</h1>
-        {intro && <p class="mt-6 max-w-[46ch] text-[15px] leading-snug text-white/85">{intro}</p>}
-        <slot />
+        <h1 id="page-title" class="display max-w-[12em]" data-split style="--d: 250ms">{title}</h1>
+        {intro && <p class="mt-6 max-w-[46ch] text-[15px] leading-snug text-white/85" data-hero-in style="--d: 600ms">{intro}</p>}
+        <div data-hero-in style="--d: 750ms"><slot /></div>
       </div>
-      <slot name="aside" />
+      <div data-hero-in style="--d: 900ms"><slot name="aside" /></div>
     </div>
   </div>
 </section>

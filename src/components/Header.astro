@@ -5,7 +5,7 @@ import { NAV } from '../data/site';
 const path = Astro.url.pathname.replace(/\/?$/, '/');
 ---
 <!-- A floating dark pill, centred at the top of every page. -->
-<header class="pointer-events-none fixed inset-x-0 top-3 z-40 flex justify-center px-4 sm:top-4">
+<header data-header class="site-header pointer-events-none fixed inset-x-0 top-3 z-40 flex justify-center px-4 sm:top-4">
   <div class="pointer-events-auto relative">
     <div class="nav-pill flex items-center gap-2 rounded-full py-1.5 pl-5 pr-1.5 text-white">
       <a href="/" class="inline-flex shrink-0 items-center rounded-[6px]" aria-label="Adash Architects, home">
@@ -70,6 +70,15 @@ const path = Astro.url.pathname.replace(/\/?$/, '/');
 </header>
 
 <style>
+  /* Drops in on load, hides while scrolling down, and always shows when it has keyboard focus. */
+  .site-header { transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease; }
+  :global(.js) .site-header { opacity: 0; transform: translateY(-24px); }
+  :global(.js.is-loaded) .site-header { opacity: 1; transform: none; transition-delay: 0.15s; }
+  :global(.js.is-loaded) .site-header:global(.is-hidden) { opacity: 0; transform: translateY(-150%); transition-delay: 0s; }
+  :global(.js.is-loaded) .site-header:focus-within { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .site-header { transition: none; opacity: 1; transform: none; }
+  }
   .nav-pill {
     background: rgb(17 18 20 / 0.62);
     border: 1px solid rgb(255 255 255 / 0.14);

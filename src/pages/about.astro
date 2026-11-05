@@ -27,12 +27,12 @@ const pad = (n: number) => String(n).padStart(2, '0');
   <section class="section" aria-labelledby="philosophy-heading">
     <div class="wrap">
       <div class="flex items-start justify-between gap-6" data-reveal>
-        <h2 id="philosophy-heading" class="heading max-w-[14em]"><span class="inline-block w-[1.1em]" aria-hidden="true"></span>Architecture that is functional, sustainable and connected —</h2>
+        <h2 id="philosophy-heading" class="heading max-w-[14em]" data-split><span class="inline-block w-[1.1em]" aria-hidden="true"></span>Architecture that is functional, sustainable and connected —</h2>
         <p class="eyebrow mt-2 hidden shrink-0 sm:block">Our philosophy</p>
       </div>
 
       <div class="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-12 lg:items-end lg:gap-6" data-reveal>
-        <div class="zoom relative aspect-[4/5] overflow-hidden rounded-[8px] bg-line lg:col-span-4 lg:col-start-5">
+        <div class="zoom relative aspect-[4/5] overflow-hidden rounded-[8px] bg-line lg:col-span-4 lg:col-start-5" data-img-reveal>
           <Photo image={siteImages.pairSmall} sizes="(min-width: 1024px) 32vw, 92vw" frameAspect={0.8} />
         </div>
         <div class="space-y-5 text-[15px] leading-relaxed text-muted lg:col-span-4 lg:pl-4">
@@ -47,10 +47,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
   <section class="section bg-[#f3f2ee]" aria-labelledby="values-heading">
     <div class="wrap">
       <div class="flex items-start justify-between gap-6" data-reveal>
-        <h2 id="values-heading" class="heading">Our core values</h2>
+        <h2 id="values-heading" class="heading" data-split>Our core values</h2>
         <p class="eyebrow mt-2 hidden shrink-0 sm:block">What guides us</p>
       </div>
-      <ul class="mt-12 grid gap-3 sm:grid-cols-2 lg:mt-16 lg:grid-cols-5" data-reveal>
+      <ul class="mt-12 grid gap-3 sm:grid-cols-2 lg:mt-16 lg:grid-cols-5" data-stagger>
         {CORE_VALUES.map((value, i) => (
           <li class="flex min-h-[260px] flex-col rounded-[10px] bg-white p-5">
             <div class="flex items-center justify-between">
@@ -69,13 +69,13 @@ const pad = (n: number) => String(n).padStart(2, '0');
   <section class="section" aria-labelledby="founder-heading">
     <div class="wrap">
       <div class="flex items-start justify-between gap-6" data-reveal>
-        <h2 id="founder-heading" class="heading">{FOUNDER_NAME}</h2>
+        <h2 id="founder-heading" class="heading" data-split>{FOUNDER_NAME}</h2>
         <p class="eyebrow mt-2 hidden shrink-0 sm:block">The founder</p>
       </div>
       <p class="mt-4 text-muted" data-reveal>{FOUNDER_TITLE}</p>
 
       <div class="mt-12 grid items-start gap-10 md:grid-cols-12 md:gap-6 lg:mt-16">
-        <div class="md:sticky md:top-28 md:col-span-4" data-reveal>
+        <div class="max-w-[360px] overflow-hidden rounded-[8px] md:sticky md:top-28 md:col-span-4" data-img-reveal>
           <Image
             src={portrait}
             alt={`Portrait of ${FOUNDER_NAME}`}
@@ -97,9 +97,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
   </section>
 
   <!-- Closing statement -->
-  <section class="section !pt-0" data-reveal>
+  <section class="section !pt-0">
     <div class="wrap border-t border-line pt-12 lg:pt-16">
-      <p class="heading max-w-[16em]">We don’t just design buildings; we craft experiences.</p>
+      <p class="heading max-w-[16em]" data-split>We don’t just design buildings; we craft experiences.</p>
     </div>
   </section>
 </Base>

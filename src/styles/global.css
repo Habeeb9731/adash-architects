@@ -13,6 +13,11 @@
   --gutter: clamp(20px, 3.4vw, 60px);
 }
 
+:root {
+  /* Long, soft deceleration used by every animation. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -93,9 +98,9 @@
     border-radius: 999px;
     background: var(--color-ink);
     color: #fff;
-    transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition: transform 0.4s var(--ease-out);
   }
-  .cta:hover .cta-icon { transform: rotate(-45deg); }
+  .cta:hover .cta-icon { transform: scale(1.06); }
   .cta-dark { background: var(--color-ink); color: #fff; }
   .cta-dark .cta-icon { background: #fff; color: var(--color-ink); }
 
@@ -135,18 +140,103 @@
   .no-scrollbar { scrollbar-width: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
 
-  /* The .js class is set in the head, so content stays visible if scripts fail. */
+  /* ---- Motion (driven by src/scripts/motion.ts) ----
+     The .js class is set in the head, so content stays visible if scripts fail. */
   .js [data-reveal] {
     opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transform: translateY(28px);
+    transition: opacity 1s var(--ease-out), transform 1.2s var(--ease-out);
   }
   .js [data-reveal].is-in { opacity: 1; transform: none; }
+
+  /* Words rise from behind a mask, one after another. */
+  .js [data-split]:not(.is-split) { visibility: hidden; }
+  [data-split] .w {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    /* Room for descenders and quote marks inside the mask. */
+    padding-block: 0.06em 0.1em;
+    margin-block: -0.06em -0.1em;
+  }
+  [data-split] .w > span {
+    display: inline-block;
+    transform: translateY(110%);
+    transition: transform 1.15s var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 55ms + var(--d, 0ms));
+  }
+  [data-split].is-in .w > span { transform: none; }
+
+  /* Lists: children fade up in sequence. */
+  .js [data-stagger] > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s var(--ease-out), transform 1.1s var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+  .js [data-stagger].is-in > * { opacity: 1; transform: none; }
+
+  /* Photos: the frame wipes open upward while the photo settles from a slight zoom. */
+  .js [data-img-reveal] {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1.35s var(--ease-out);
+  }
+  .js [data-img-reveal].is-in { clip-path: inset(0 0 0 0); }
+  .js [data-img-reveal]:not(.revealed) img {
+    transform: scale(1.22);
+    transition: transform 1.8s var(--ease-out);
+  }
+  .js [data-img-reveal].is-in:not(.revealed) img { transform: scale(1); }
+
+  /* Hero: photo settles, then content arrives in sequence. */
+  .js [data-hero-photo] img { transform: scale(1.14); }
+  .js.is-loaded [data-hero-photo] img {
+    transform: scale(1);
+    transition: transform 2.6s var(--ease-out);
+  }
+  .js [data-hero-in] {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  .js.is-loaded [data-hero-in] {
+    opacity: 1;
+    transform: none;
+    transition: opacity 1.1s var(--ease-out), transform 1.3s var(--ease-out);
+    transition-delay: var(--d, 0ms);
+  }
+  [data-parallax] { will-change: transform; }
+
+  /* Button arrow slides out to the right and back in from the left. */
+  .cta-icon { overflow: hidden; }
+  .cta:hover .cta-icon svg { animation: arrow-through 0.6s var(--ease-out); }
+}
+
+@keyframes arrow-through {
+  0% { transform: none; }
+  40% { transform: translateX(150%); }
+  41% { transform: translateX(-150%); }
+  100% { transform: none; }
+}
+
+/* Soft crossfade between pages, in browsers that support it. */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+  .js [data-reveal], .js [data-stagger] > *, .js [data-hero-in] { opacity: 1; transform: none; transition: none; }
+  .js [data-split]:not(.is-split) { visibility: visible; }
+  [data-split] .w > span { transform: none; transition: none; }
+  .js [data-img-reveal] { clip-path: none; transition: none; }
+  .js [data-img-reveal] img, .js [data-hero-photo] img { transform: none !important; transition: none !important; }
+  [data-parallax] { transform: none !important; }
+  .cta:hover .cta-icon svg { animation: none; }
+  .cta:hover .cta-icon { transform: none; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
   .zoom img { transition: none; }
   .zoom:hover img, a:focus-visible .zoom img { transform: none; }
   .btn, .cta-icon { transition: none; }

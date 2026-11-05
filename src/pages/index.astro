@@ -7,9 +7,6 @@ import { projects, siteImages } from '../data/projects';
 import { CORE_VALUES, FOUNDER_NAME, FOUNDER_TITLE, SITE } from '../data/site';
 import portrait from '../assets/shafeeqIcon.png';
 
-// The project pinned to the hero card. It needs a description.
-const pinned = projects.find((p) => p.slug === 'urban-commercial-tower')!;
-
 // Four projects for the staggered grid, with the layout of each slot.
 const featured = projects.slice(0, 4);
 const slots = [
@@ -44,31 +41,13 @@ const services = [
     <p class="eyebrow absolute right-[var(--gutter)] top-[92px] hidden text-white/80 sm:block sm:top-[104px]" data-hero-in style="--d: 1100ms">{SITE.address.city}, {SITE.address.region}</p>
 
     <div class="wrap flex h-full flex-col justify-end pb-8 sm:pb-12 lg:pb-14">
-      <div class="grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div>
+      <div>
           <h1 id="hero-heading" class="display max-w-[12em]" data-split style="--d: 250ms">“Innovative design through thoughtful architecture”</h1>
           <p class="mt-6 max-w-[44ch] text-[15px] leading-snug text-white/85" data-hero-in style="--d: 750ms">We create meaningful spaces rooted in both functionality and aesthetics, from first sketch to finished building.</p>
           <a href="/contact/" class="cta mt-8" data-hero-in style="--d: 900ms">
             Start a project
             <span class="cta-icon"><Icon name="arrow-right" size={16} /></span>
           </a>
-        </div>
-
-        <div class="hidden lg:block" data-hero-in style="--d: 1050ms">
-          <p class="mb-2 text-right text-[11px] text-white/70">01</p>
-          <a href={`/projects/#${pinned.slug}`} class="group flex gap-3 rounded-[10px] bg-white p-2 text-ink shadow-[0_20px_50px_-24px_rgb(0_0_0/0.6)]">
-            <span class="zoom relative h-[104px] w-[112px] shrink-0 overflow-hidden rounded-[6px] bg-line">
-              <Photo image={pinned.image} sizes="112px" frameAspect={1.08} />
-            </span>
-            <span class="flex min-w-0 flex-col py-0.5 pr-1">
-              <span class="text-[14px] leading-tight tracking-[-0.01em]">{pinned.name}</span>
-              <span class="mt-1 line-clamp-3 text-[11.5px] leading-snug text-muted">{pinned.description}</span>
-              <span class="mt-auto inline-flex items-center gap-1 pt-1 text-[11px] uppercase tracking-[0.04em]">
-                View <Icon name="arrow-right" size={12} class="transition-transform group-hover:translate-x-0.5" />
-              </span>
-            </span>
-          </a>
-        </div>
       </div>
     </div>
   </section>

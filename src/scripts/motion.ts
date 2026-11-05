@@ -59,15 +59,22 @@ if (reduced) {
   });
 
   if ('IntersectionObserver' in window) {
+    // A fully clipped photo frame never counts as intersecting, so photo frames are
+    // triggered by their (unclipped) parent instead of by themselves.
+    const targets = new Map<Element, HTMLElement[]>();
+    watched.forEach((el) => {
+      const trigger = el.hasAttribute('data-img-reveal') ? el.parentElement! : el;
+      targets.set(trigger, [...(targets.get(trigger) ?? []), el]);
+    });
     const io = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
-          entry.target.classList.add('is-in');
+          targets.get(entry.target)?.forEach((el) => el.classList.add('is-in'));
           io.unobserve(entry.target);
         }
       }
-    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
-    watched.forEach((el) => io.observe(el));
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0 });
+    targets.forEach((_, trigger) => io.observe(trigger));
   } else {
     watched.forEach((el) => el.classList.add('is-in'));
   }

@@ -22,16 +22,16 @@ const { image, title, label, intro, focus = 'center' } = Astro.props;
     <div class="page-hero-shade absolute inset-0"></div>
   </div>
 
-  <p class="eyebrow absolute right-[var(--gutter)] top-[92px] hidden text-white/80 sm:block sm:top-[104px]" data-hero-in style="--d: 1000ms">{label}</p>
+  <p class="eyebrow absolute right-[var(--gutter)] top-[92px] hidden text-white/80 sm:block sm:top-[104px]" data-hero-in style="--d: 650ms">{label}</p>
 
   <div class="wrap flex h-full flex-col justify-end pb-8 sm:pb-12 lg:pb-14">
     <div class="grid items-end gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
       <div>
-        <h1 id="page-title" class="display max-w-[12em]" data-split style="--d: 250ms">{title}</h1>
-        {intro && <p class="mt-6 max-w-[46ch] text-[15px] leading-snug text-white/85" data-hero-in style="--d: 600ms">{intro}</p>}
-        <div data-hero-in style="--d: 750ms"><slot /></div>
+        <h1 id="page-title" class="display max-w-[12em]" data-split style="--d: 120ms">{title}</h1>
+        {intro && <p class="mt-6 max-w-[46ch] text-[15px] leading-snug text-white/85" data-hero-in style="--d: 380ms">{intro}</p>}
+        <div data-hero-in style="--d: 480ms"><slot /></div>
       </div>
-      <div data-hero-in style="--d: 900ms"><slot name="aside" /></div>
+      <div data-hero-in style="--d: 560ms"><slot name="aside" /></div>
     </div>
   </div>
 </section>

@@ -80,15 +80,15 @@ if (reduced) {
   }
 
   // Lift the curtain and start the hero sequence once the hero photo is decoded,
-  // so the page never opens on a half-loaded image. Never wait more than 1.2s.
+  // so the page never opens on a half-loaded image. Never wait more than 0.6s.
   const heroImg = document.querySelector<HTMLImageElement>('[data-hero-photo] img');
   const ready = heroImg ? heroImg.decode().catch(() => {}) : Promise.resolve();
-  Promise.race([ready, new Promise((r) => setTimeout(r, 1200))]).then(() => {
+  Promise.race([ready, new Promise((r) => setTimeout(r, 600))]).then(() => {
     requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-loaded')));
   });
 
   // Page transitions: cover the page with the curtain, then navigate.
-  const LEAVE_MS = 650;
+  const LEAVE_MS = 400;
   document.addEventListener('click', (e) => {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const link = (e.target as Element).closest?.('a');
